@@ -47,9 +47,9 @@ app.get('/createProfile/:mid/:name/:email', function (req, res) {
     console.log(name);
     console.log(email);
     console.log(req.headers.authorization);
-    // var jwtToken = req.headers.authorization.split(" ");
-    // aad.verify(jwtToken[1], null, function (err, result) {
-    //     if (result) {
+    var jwtToken = req.headers.authorization.split(" ");
+    aad.verify(jwtToken[1], null, function (err, result) {
+        if (result) {
             console.log("JWT is valid");
             var queryString = '{"mId":"' + mid + '"}';
             var testObject = {
@@ -74,22 +74,22 @@ app.get('/createProfile/:mid/:name/:email', function (req, res) {
                 } else
                     res.send("user already present");
             });
-    //     }
-    //     else {
-    //         console.log("JWT is invalid: " + err);
-    //         res.send("403 : ACCESS FORBIDDEN");
-    //     }
+        }
+        else {
+            console.log("JWT is invalid: " + err);
+            res.send("403 : ACCESS FORBIDDEN");
+        }
 
-    // });
+    });
 });
 
 //it fetches the user profile
 app.get('/getUserProfile/:mid', function (req, res) {
     var mid = req.params.mid;
     console.log(req.headers.authorization);
-    // var jwtToken = req.headers.authorization.split(" ");
-    // aad.verify(jwtToken[1], null, function (err, result) {
-    //     if (result) {
+    var jwtToken = req.headers.authorization.split(" ");
+    aad.verify(jwtToken[1], null, function (err, result) {
+        if (result) {
             console.log("JWT is valid");
             var queryString = '{"mId":"' + mid + '"}';
             db.usersDB.find(JSON.parse(queryString), function (err, docs) {
@@ -97,13 +97,13 @@ app.get('/getUserProfile/:mid', function (req, res) {
                 res.header("Access-Control-Allow-Headers", "X-Requested-With");
                 res.send(docs);
             });
-    //     }
-    //     else {
-    //         console.log("JWT is invalid: " + err);
-    //         res.send("403 : ACCESS FORBIDDEN");
-    //     }
+        }
+        else {
+            console.log("JWT is invalid: " + err);
+            res.send("403 : ACCESS FORBIDDEN");
+        }
 
-    // });
+    });
 });
 
 //it updates the user profile
@@ -111,10 +111,10 @@ app.get('/updateUserProfile/:mid/:genre', function (req, res) {
     var mid = req.params.mid;
     var myGenre;
     console.log(req.headers.authorization);
-    // var jwtToken = req.headers.authorization.split(" ");
-    // // if (req.headers.authorization != null) {
-    // aad.verify(jwtToken[1], null, function (err, result) {
-    //     if (result) {
+    var jwtToken = req.headers.authorization.split(" ");
+    // if (req.headers.authorization != null) {
+    aad.verify(jwtToken[1], null, function (err, result) {
+        if (result) {
             console.log("JWT is valid");
             if (req.params.genre === "BLANK") {
                 myGenre = [];
@@ -129,54 +129,54 @@ app.get('/updateUserProfile/:mid/:genre', function (req, res) {
                 res.header("Access-Control-Allow-Headers", "X-Requested-With");
                 res.send(docs);
             });
-    //     }
-    //     else {
-    //         console.log("JWT is invalid: " + err);
-    //         res.send("403 : ACCESS FORBIDDEN");
-    //     }
-    // });
+        }
+        else {
+            console.log("JWT is invalid: " + err);
+            res.send("403 : ACCESS FORBIDDEN");
+        }
+    });
 });
 app.get('/getAllAdminDetails', function (req, res) {
     // console.log(req.headers.authorization);
     // if (req.headers.authorization != null) {
     console.log(req.headers.authorization);
-    //var jwtToken = req.headers.authorization.split(" ");
-    // if (req.headers.authorization != null) {
-    //aad.verify(jwtToken[1], null, function (err, result) {
-      //  if (result) {
-        //    console.log("JWT is valid");
+    var jwtToken = req.headers.authorization.split(" ");
+    
+    aad.verify(jwtToken[1], null, function (err, result) {
+        if (result) {
+         console.log("JWT is valid");
             db.probableAdmins.find({},{ "mId": 1, "name": 1 }, function (err, docs) {
                 res.header("Access-Control-Allow-Origin", "*");
                 res.header("Access-Control-Allow-Headers", "X-Requested-With");
                 res.send(docs);
             });
-    //     } else {
-    //         console.log("JWT is invalid: " + err);
-    //         res.send("403 : ACCESS FORBIDDEN");
-    //     }
-    // });
+        } else {
+            console.log("JWT is invalid: " + err);
+            res.send("403 : ACCESS FORBIDDEN");
+        }
+    });
 });
 
-//app.get('/getAllAdminDetails', function (req, res) {
-    // console.log(req.headers.authorization);
-    // if (req.headers.authorization != null) {
-    //console.log(req.headers.authorization);
-    // var jwtToken = req.headers.authorization.split(" ");
-    // // if (req.headers.authorization != null) {
-    // aad.verify(jwtToken[1], null, function (err, result) {
-    //     if (result) {
-            // console.log("JWT is valid");
-            // db.ProbableModel.find({ "role": "admin" }, { "mId": 1, "name": 1 }, function (err, docs) {
-            //     res.header("Access-Control-Allow-Origin", "*");
-            //     res.header("Access-Control-Allow-Headers", "X-Requested-With");
-            //     res.send(docs);
-            // });
-    //     } else {
-    //         console.log("JWT is invalid: " + err);
-    //         res.send("403 : ACCESS FORBIDDEN");
-    //     }
-    // });
-//});
+// //app.get('/getAllAdminDetails', function (req, res) {
+//     // console.log(req.headers.authorization);
+//     // if (req.headers.authorization != null) {
+//     //console.log(req.headers.authorization);
+//     var jwtToken = req.headers.authorization.split(" ");
+//     // if (req.headers.authorization != null) {
+//     aad.verify(jwtToken[1], null, function (err, result) {
+//         if (result) {
+//             // console.log("JWT is valid");
+//             // db.ProbableModel.find({ "role": "admin" }, { "mId": 1, "name": 1 }, function (err, docs) {
+//             //     res.header("Access-Control-Allow-Origin", "*");
+//             //     res.header("Access-Control-Allow-Headers", "X-Requested-With");
+//             //     res.send(docs);
+//             // });
+//     //     } else {
+//     //         console.log("JWT is invalid: " + err);
+//     //         res.send("403 : ACCESS FORBIDDEN");
+//     //     }
+//     // });
+// //});
 
 //transfer admin access
 app.get('/transferAccess/:mid/:adminId', function (req, res) {
@@ -185,10 +185,10 @@ app.get('/transferAccess/:mid/:adminId', function (req, res) {
     var queryString1 = '{"mId":"' + mid + '"}';
     var queryString2 = '{"mId":"' + adminId + '"}';
     console.log(req.headers.authorization);
-    // var jwtToken = req.headers.authorization.split(" ");
-    // // if (req.headers.authorization != null) {
-    // aad.verify(jwtToken[1], null, function (err, result) {
-    //     if (result) {
+    var jwtToken = req.headers.authorization.split(" ");
+    // if (req.headers.authorization != null) {
+    aad.verify(jwtToken[1], null, function (err, result) {
+        if (result) {
             console.log("JWT is valid");
             // db.usersDB.find({ "role": "admin" }, { "mId": 1,"name":1 }, function (err, docs) {
             //     res.header("Access-Control-Allow-Origin", "*");
@@ -203,11 +203,11 @@ app.get('/transferAccess/:mid/:adminId', function (req, res) {
                 res.send("success");
             });
 
-    //     } else {
-    //         console.log("JWT is invalid: " + err);
-    //         res.send("403 : ACCESS FORBIDDEN");
-    //     }
-    // });
+        } else {
+            console.log("JWT is invalid: " + err);
+            res.send("403 : ACCESS FORBIDDEN");
+        }
+    });
 });
 
 app.get('/requestBook/:mid/:isbn', function (req, res) {
@@ -216,10 +216,10 @@ app.get('/requestBook/:mid/:isbn', function (req, res) {
     var isbn = req.params.isbn;
     var mid = req.params.mid;
     console.log(req.headers.authorization);
-    // var jwtToken = req.headers.authorization.split(" ");
-    // // if (req.headers.authorization != null) {
-    // aad.verify(jwtToken[1], null, function (err, result) {
-    //     if (result) {
+    var jwtToken = req.headers.authorization.split(" ");
+    // if (req.headers.authorization != null) {
+    aad.verify(jwtToken[1], null, function (err, result) {
+        if (result) {
             var queryString = '{"$and":[{"isbn":"' + isbn + '"},{"available":{"$gte":1}}]}';
             var queryString1 = '{"isbn":"' + isbn + '","mId":"' + mid + '"}';
             var queryString2 = '{"mId":"' + mid + '"}';
@@ -288,12 +288,12 @@ app.get('/requestBook/:mid/:isbn', function (req, res) {
                     });
                 }
             });
-    //     } else {
-    //         console.log("JWT is invalid: " + err);
-    //         res.send("403 : ACCESS FORBIDDEN");
-    //     }
+        } else {
+            console.log("JWT is invalid: " + err);
+            res.send("403 : ACCESS FORBIDDEN");
+        }
 
-    // });
+    });
 
 });
 
@@ -304,9 +304,9 @@ app.get('/issueBook/:mid/:isbn/:issueDate/:dueDate', function (req, res) {
     var issueDate = req.params.issueDate;
     var dueDate = req.params.dueDate;
     console.log(req.headers.authorization);
-    // var jwtToken = req.headers.authorization.split(" ");
-    // aad.verify(jwtToken[1], null, function (err, result) {
-    //     if (result) {
+    var jwtToken = req.headers.authorization.split(" ");
+    aad.verify(jwtToken[1], null, function (err, result) {
+        if (result) {
             var queryString = '{"$and":[{"isbn":"' + isbn + '"},{"available":{"$gte":1}}]}';
             var queryString1 = '{"isbn":"' + isbn + '"}';
             var queryString2 = '{"mId":"' + mid + '"}';
@@ -391,14 +391,14 @@ app.get('/issueBook/:mid/:isbn/:issueDate/:dueDate', function (req, res) {
                 else
                     res.send("failed");
             });
-    //     }
-    //     // });
+        }
+        // });
 
-    //     else {
-    //         console.log("JWT is invalid: " + err);
-    //         res.send("403 : ACCESS FORBIDDEN");
-    //     }
-    // });
+        else {
+            console.log("JWT is invalid: " + err);
+            res.send("403 : ACCESS FORBIDDEN");
+        }
+    });
 });
 
 
@@ -406,9 +406,9 @@ app.get('/issueBook/:mid/:isbn/:issueDate/:dueDate', function (req, res) {
 app.get('/availableBooks/:isbn', function (req, res) {
     var isbn = req.params.isbn;
     console.log(req.headers.authorization);
-    // var jwtToken = req.headers.authorization.split(" ");
-    // aad.verify(jwtToken[1], null, function (err, result) {
-    //     if (result) {
+    var jwtToken = req.headers.authorization.split(" ");
+    aad.verify(jwtToken[1], null, function (err, result) {
+        if (result) {
             var queryString1 = '{"isbn":"' + isbn + '"}';
             res.header("Access-Control-Allow-Origin", "*");
             res.header("Access-Control-Allow-Headers", "X-Requested-With");
@@ -416,12 +416,12 @@ app.get('/availableBooks/:isbn', function (req, res) {
                 console.log(" before available" + docs[0].available);
                 res.send(docs);
             });
-    //     }
-    //     else {
-    //         console.log("JWT is invalid: " + err);
-    //         res.send("403 : ACCESS FORBIDDEN");
-    //     }
-    // });
+        }
+        else {
+            console.log("JWT is invalid: " + err);
+            res.send("403 : ACCESS FORBIDDEN");
+        }
+    });
 });
 
 app.get('/returnRequest/:mid/:bookId', function (req, res) {
@@ -431,9 +431,9 @@ app.get('/returnRequest/:mid/:bookId', function (req, res) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
     console.log(req.headers.authorization);
-    // var jwtToken = req.headers.authorization.split(" ");
-    // aad.verify(jwtToken[1], null, function (err, result) {
-    //     if (result) {
+    var jwtToken = req.headers.authorization.split(" ");
+    aad.verify(jwtToken[1], null, function (err, result) {
+        if (result) {
             var queryString1 = '{"bookId":"' + bookId + '"}';
             var queryString2 = '{"mId":"' + mid + '"}';
             var queryString3 = '{"$set":{"issueDetails.0.returnRequest":"true"}}';
@@ -483,12 +483,12 @@ app.get('/returnRequest/:mid/:bookId', function (req, res) {
             //     res.send(docs);
             // });
 
-    //     } else {
-    //         console.log("JWT is invalid: " + err);
-    //         res.send("403 : ACCESS FORBIDDEN");
-    //     }
+        } else {
+            console.log("JWT is invalid: " + err);
+            res.send("403 : ACCESS FORBIDDEN");
+        }
 
-    // });
+    });
 });
 // Return book API
 app.get('/return/:mid/:bookId', function (req, res) {
@@ -498,9 +498,9 @@ app.get('/return/:mid/:bookId', function (req, res) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
     console.log(req.headers.authorization);
-    // var jwtToken = req.headers.authorization.split(" ");
-    // aad.verify(jwtToken[1], null, function (err, result) {
-    //     if (result) {
+    var jwtToken = req.headers.authorization.split(" ");
+    aad.verify(jwtToken[1], null, function (err, result) {
+        if (result) {
             var queryString1 = '{"bookId":"' + bookId + '"}';
             var queryString2 = '{"mId":"' + mid + '"}';
             var d = new Date();
@@ -538,12 +538,12 @@ app.get('/return/:mid/:bookId', function (req, res) {
 
                 res.send(docs);
             });
-    //     }
-    //     else {
-    //         console.log("JWT is invalid: " + err);
-    //         res.send("403 : ACCESS FORBIDDEN");
-    //     }
-    // });
+        }
+        else {
+            console.log("JWT is invalid: " + err);
+            res.send("403 : ACCESS FORBIDDEN");
+        }
+    });
 });
 // renew book api
 app.get('/renewBook/:bookId/:mid', function (req, res) {
@@ -552,9 +552,9 @@ app.get('/renewBook/:bookId/:mid', function (req, res) {
     var isbn = bookId.slice(0, 13);
     // var queryString1 = '{"bookId":"' + bookId + '"}';
     console.log(req.headers.authorization);
-    // var jwtToken = req.headers.authorization.split(" ");
-    // aad.verify(jwtToken[1], null, function (err, result) {
-    //     if (result) {
+    var jwtToken = req.headers.authorization.split(" ");
+    aad.verify(jwtToken[1], null, function (err, result) {
+        if (result) {
             var queryString2 = '{"mId":"' + mid + '"}';
 
             var queryString1 = '{"$and":[{"mId":"' + mid + '"},{"issueDetails.bookId":"' + bookId + '"}]}';
@@ -626,13 +626,13 @@ app.get('/renewBook/:bookId/:mid', function (req, res) {
                 // });
 
             });
-    //     }
-    //     else {
-    //         console.log("JWT is invalid: " + err);
-    //         res.send("403 : ACCESS FORBIDDEN");
-    //     }
+        }
+        else {
+            console.log("JWT is invalid: " + err);
+            res.send("403 : ACCESS FORBIDDEN");
+        }
 
-    // });
+    });
 
 });
 
@@ -641,9 +641,9 @@ app.get('/getMyIssuedHistory/:mid/:date', function (req, res) {
     var mid = req.params.mid;
     var date = req.params.date;
     console.log(req.headers.authorization);
-    // var jwtToken = req.headers.authorization.split(" ");
-    // aad.verify(jwtToken[1], null, function (err, result) {
-    //     if (result) {
+    var jwtToken = req.headers.authorization.split(" ");
+    aad.verify(jwtToken[1], null, function (err, result) {
+        if (result) {
             var queryString = '{"$and":[{"mId":"' + mid + '"},{"issueDate":"' + date + '"}]}';
             // var queryString = '{"mId":"' + mid + '"}';
             db.issuedBooksDB.find(JSON.parse(queryString), function (err, docs) {
@@ -652,20 +652,20 @@ app.get('/getMyIssuedHistory/:mid/:date', function (req, res) {
                 console.log("history......", docs)
                 res.send(docs);
             });
-    //     }
-    //     else {
-    //         console.log("JWT is invalid: " + err);
-    //         res.send("403 : ACCESS FORBIDDEN");
-    //     }
+        }
+        else {
+            console.log("JWT is invalid: " + err);
+            res.send("403 : ACCESS FORBIDDEN");
+        }
 
-    // });
+    });
 });
 //api for fetching all requested books history for all users
 app.get('/getAllRequestBooksHistory', function (req, res) {
 console.log(req.headers.authorization);
-    // var jwtToken = req.headers.authorization.split(" ");
-    // aad.verify(jwtToken[1], null, function (err, result) {
-    //     if (result) {
+    var jwtToken = req.headers.authorization.split(" ");
+    aad.verify(jwtToken[1], null, function (err, result) {
+        if (result) {
         // var queryString = '{"$and":[{"mId":"' + mid + '"},{"issueDate":"' + date + '"}]}';
         // var queryString = '{"mId":"' + mid + '"}';
         db.requestedDB.find({}, function (err, docs) {
@@ -673,11 +673,11 @@ console.log(req.headers.authorization);
             res.header("Access-Control-Allow-Headers", "X-Requested-With");
             res.send(docs);
         });
-//     } else {
-//         console.log("JWT is invalid: " + err);
-//         res.send("403 : ACCESS FORBIDDEN");
-//     }
-// });
+    } else {
+        console.log("JWT is invalid: " + err);
+        res.send("403 : ACCESS FORBIDDEN");
+    }
+});
 });
 //api for removind current requestbooks history for the user
 app.get('/declineRequest/:mid/:isbn', function (req, res) {
@@ -687,9 +687,9 @@ app.get('/declineRequest/:mid/:isbn', function (req, res) {
     var queryString2 = '{"mId":"' + mid + '"}';
     var queryString7 = '{"$and":[{"mId":"' + mid + '"},{"isbn":"' + isbn + '"}]}';
     console.log(req.headers.authorization);
-    // var jwtToken = req.headers.authorization.split(" ");
-    // aad.verify(jwtToken[1], null, function (err, result) {
-    //     if (result) {
+    var jwtToken = req.headers.authorization.split(" ");
+    aad.verify(jwtToken[1], null, function (err, result) {
+        if (result) {
         db.requestedDB.remove(JSON.parse(queryString7), function (err, docs) {
             console.log("Successfully removed the current request from requestedDB dataabase");
         });
@@ -697,18 +697,18 @@ app.get('/declineRequest/:mid/:isbn', function (req, res) {
             console.log(docs);
             res.send("success");
         });
-//     } else {
-//             console.log("JWT is invalid: " + err);
-//         res.send("403 : ACCESS FORBIDDEN");
-//     }
-// });
+    } else {
+            console.log("JWT is invalid: " + err);
+        res.send("403 : ACCESS FORBIDDEN");
+    }
+});
 });
 //api for fetching all return requested books history for all users
 app.get('/getAllReturnRequestBooksHistory', function (req, res) {
     console.log(req.headers.authorization);
-    // var jwtToken = req.headers.authorization.split(" ");
-    // aad.verify(jwtToken[1], null, function (err, result) {
-    //     if (result) {
+    var jwtToken = req.headers.authorization.split(" ");
+    aad.verify(jwtToken[1], null, function (err, result) {
+        if (result) {
         // var queryString = '{"$and":[{"mId":"' + mid + '"},{"issueDate":"' + date + '"}]}';
         // var queryString = '{"mId":"' + mid + '"}';
         db.booksToBeReturnedDB.find({}, function (err, docs) {
@@ -716,18 +716,18 @@ app.get('/getAllReturnRequestBooksHistory', function (req, res) {
             res.header("Access-Control-Allow-Headers", "X-Requested-With");
             res.send(docs);
         });
-//     } else {
-//          console.log("JWT is invalid: " + err);
-//         res.send("403 : ACCESS FORBIDDEN");
-//     }
-// });
+    } else {
+         console.log("JWT is invalid: " + err);
+        res.send("403 : ACCESS FORBIDDEN");
+    }
+});
 });
 //api for fetching all to be returned books history of all users
 app.get('/getAllToBeReturnedBooksHistory', function (req, res) {
     console.log(req.headers.authorization);
-    // var jwtToken = req.headers.authorization.split(" ");
-    // aad.verify(jwtToken[1], null, function (err, result) {
-    //     if (result) {
+    var jwtToken = req.headers.authorization.split(" ");
+    aad.verify(jwtToken[1], null, function (err, result) {
+        if (result) {
         // var queryString = '{"$and":[{"mId":"' + mid + '"},{"issueDate":"' + date + '"}]}';
         // var queryString = '{"mId":"' + mid + '"}';
         db.booksToBeReturnedDB.find({}, function (err, docs) {
@@ -735,20 +735,20 @@ app.get('/getAllToBeReturnedBooksHistory', function (req, res) {
             res.header("Access-Control-Allow-Headers", "X-Requested-With");
             res.send(docs);
         });
-//     } else {
-//         console.log("JWT is invalid: " + err);
-//         res.send("403 : ACCESS FORBIDDEN");
-//     }
-// });
+    } else {
+        console.log("JWT is invalid: " + err);
+        res.send("403 : ACCESS FORBIDDEN");
+    }
+});
 });
 //api for fetching all issued books history for a particular user required in user page
 app.get('/getMyReturnedHistory/:mid/:date', function (req, res) {
     var mid = req.params.mid;
     var date = req.params.date;
     console.log(req.headers.authorization);
-    // var jwtToken = req.headers.authorization.split(" ");
-    // aad.verify(jwtToken[1], null, function (err, result) {
-    //     if (result) {
+    var jwtToken = req.headers.authorization.split(" ");
+    aad.verify(jwtToken[1], null, function (err, result) {
+        if (result) {
             var queryString = '{"$and":[{"mId":"' + mid + '"},{"returnedOn":"' + date + '"}]}';
             // var queryString = '{"mId":"' + mid + '"}';
             console.log(queryString);
@@ -758,48 +758,48 @@ app.get('/getMyReturnedHistory/:mid/:date', function (req, res) {
                 console.log(docs);
                 res.send(docs);
             });
-    //     }
-    //     else {
-    //         console.log("JWT is invalid: " + err);
-    //         res.send("403 : ACCESS FORBIDDEN");
-    //     }
-    // });
+        }
+        else {
+            console.log("JWT is invalid: " + err);
+            res.send("403 : ACCESS FORBIDDEN");
+        }
+    });
 });
 //api for fetching all issued books history required in admin page
 app.get('/getAllIssuedBooksHistory/', function (req, res) {
     console.log(req.headers.authorization);
-    // var jwtToken = req.headers.authorization.split(" ");
-    // aad.verify(jwtToken[1], null, function (err, result) {
-    //     if (result) {
+    var jwtToken = req.headers.authorization.split(" ");
+    aad.verify(jwtToken[1], null, function (err, result) {
+        if (result) {
             db.issuedBooksDB.find({}, function (err, docs) {
                 res.header("Access-Control-Allow-Origin", "*");
                 res.header("Access-Control-Allow-Headers", "X-Requested-With");
                 res.send(docs);
             });
-    //     } else {
-    //         console.log("JWT is invalid: " + err);
-    //         res.send("403 : ACCESS FORBIDDEN");
-    //     }
+        } else {
+            console.log("JWT is invalid: " + err);
+            res.send("403 : ACCESS FORBIDDEN");
+        }
 
-    // });
+    });
 });
 //api for fetching all returned books history required in admin page
 app.get('/getAllReturnedBooksHistory/', function (req, res) {
     console.log(req.headers.authorization);
-    // var jwtToken = req.headers.authorization.split(" ");
-    // aad.verify(jwtToken[1], null, function (err, result) {
-    //     if (result) {
+    var jwtToken = req.headers.authorization.split(" ");
+    aad.verify(jwtToken[1], null, function (err, result) {
+        if (result) {
             db.returnedBooksDB.find({}, function (err, docs) {
                 res.header("Access-Control-Allow-Origin", "*");
                 res.header("Access-Control-Allow-Headers", "X-Requested-With");
                 res.send(docs);
             });
-    //     } else {
-    //         console.log("JWT is invalid: " + err);
-    //         res.send("403 : ACCESS FORBIDDEN");
-    //     }
+        } else {
+            console.log("JWT is invalid: " + err);
+            res.send("403 : ACCESS FORBIDDEN");
+        }
 
-    // });
+    });
 });
 
 
@@ -812,9 +812,9 @@ app.get('/getBook/:type/:text', function (req, res) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
     console.log(req.headers.authorization);
-    // var jwtToken = req.headers.authorization.split(" ");
-    // aad.verify(jwtToken[1], null, function (err, result) {
-    //     if (result) {
+    var jwtToken = req.headers.authorization.split(" ");
+    aad.verify(jwtToken[1], null, function (err, result) {
+        if (result) {
             //writing query string for search based on pattern
             if (text == 'BLANK') {
                 db.booksDB.find({}, function (err, docs) {
@@ -827,12 +827,12 @@ app.get('/getBook/:type/:text', function (req, res) {
                 });
             }
 
-    //     } else {
-    //         console.log("JWT is invalid: " + err);
-    //         res.send("403 : ACCESS FORBIDDEN");
-    //     }
+        } else {
+            console.log("JWT is invalid: " + err);
+            res.send("403 : ACCESS FORBIDDEN");
+        }
 
-    // });
+    });
 });
 //Get my issued assets api for mobile
 app.get('/getmyMobileAssetBookIds/:mid', function (req, res) {
@@ -841,9 +841,9 @@ app.get('/getmyMobileAssetBookIds/:mid', function (req, res) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
     console.log(req.headers.authorization);
-    // var jwtToken = req.headers.authorization.split(" ");
-    // aad.verify(jwtToken[1], null, function (err, result) {
-    //     if (result) {
+    var jwtToken = req.headers.authorization.split(" ");
+    aad.verify(jwtToken[1], null, function (err, result) {
+        if (result) {
             console.log("JWT is valid");
             var data = '{"mId":"' + mid + '"}';
             console.log(data);
@@ -853,21 +853,21 @@ app.get('/getmyMobileAssetBookIds/:mid', function (req, res) {
                 // console.log(docs[0].issueDetails);
                 res.send(docs);
             });
-    //     }
-    //     else {
-    //         console.log("JWT is invalid: " + err);
-    //         res.send("403 : ACCESS FORBIDDEN");
-    //     }
-    // });
+        }
+        else {
+            console.log("JWT is invalid: " + err);
+            res.send("403 : ACCESS FORBIDDEN");
+        }
+    });
 });
 //Get my issued assets api for web
 app.get('/getmyWebAssetBookIds/:uId', function (req, res) {
     var mid = req.params.uId;
     console.log(mid);
     console.log(req.headers.authorization);
-    // var jwtToken = req.headers.authorization.split(" ");
-    // aad.verify(jwtToken[1], null, function (err, result) {
-    //     if (result) {
+    var jwtToken = req.headers.authorization.split(" ");
+    aad.verify(jwtToken[1], null, function (err, result) {
+        if (result) {
             var data = '{"mId":"' + mid + '"}';
             db.userDB.find(JSON.parse(data), { 'issueDetails.bookId': 1 }, function (err, docs) {
                 res.header("Access-Control-Allow-Origin", "*");
@@ -876,17 +876,16 @@ app.get('/getmyWebAssetBookIds/:uId', function (req, res) {
                     res.send(err);
                 } else
                     res.send(docs[0].issueDetails);
-
                 // for(var i=0;i<docs[0].issueDetails.length;i++){
                 // console.lo   g(docs[0].issueDetails[i].bookId,"\n");
                 // }
             });
-    //     } else {
-    //         console.log("JWT is invalid: " + err);
-    //         res.send("403 : ACCESS FORBIDDEN");
-    //     }
+        } else {
+            console.log("JWT is invalid: " + err);
+            res.send("403 : ACCESS FORBIDDEN");
+        }
 
-    // });
+    });
 });
 
 app.get('/getmyAsset/:bId/:mid', function (req, res) {
@@ -896,50 +895,50 @@ app.get('/getmyAsset/:bId/:mid', function (req, res) {
     res.header("Access-Control-Allow-Origin", "*");
     res.header("Access-Control-Allow-Headers", "X-Requested-With");
     console.log(req.headers.authorization);
-    // var jwtToken = req.headers.authorization.split(" ");
-    // aad.verify(jwtToken[1], null, function (err, result) {
-    //     if (result) {
+    var jwtToken = req.headers.authorization.split(" ");
+    aad.verify(jwtToken[1], null, function (err, result) {
+        if (result) {
             console.log("JWT is valid");
             var data = '{"isbn":"' + bid + '"}';
             db.booksDB.find(JSON.parse(data), {}, function (err, docs) {
                 console.log("*****************************MY ASSET" + docs);
                 res.send(docs);
             });
-    //     }
-    //     else {
-    //         console.log("JWT is invalid: " + err);
-    //         res.send("403 : ACCESS FORBIDDEN");
-    //     }
-    // });
+        }
+        else {
+            console.log("JWT is invalid: " + err);
+            res.send("403 : ACCESS FORBIDDEN");
+        }
+    });
 });
 //Add boonew book API
-app.post('/addNewBook', function (req, res) {
-    console.log(req.headers.authorization);
-    // var jwtToken = req.headers.authorization.split(" ");
-    // aad.verify(jwtToken[1], null, function (err, result) {
-    //     if (result) {
-            db.booksDB.insert(JSON.parse(req.body.test));
-            db.booksDB.find(function (err, docs) {
-                res.header("Access-Control-Allow-Origin", "*");
-                res.header("Access-Control-Allow-Headers", "X-Requested-With");
-                console.log(docs);
-            });
-            res.end("posted");
-    //     } else {
-    //         console.log("JWT is invalid: " + err);
-    //         res.send("403 : ACCESS FORBIDDEN");
-    //     }
+// app.post('/addNewBook', function (req, res) {
+//     console.log(req.headers.authorization);
+//     // var jwtToken = req.headers.authorization.split(" ");
+//     // aad.verify(jwtToken[1], null, function (err, result) {
+//     //     if (result) {
+//             db.booksDB.insert(JSON.parse(req.body.test));
+//             db.booksDB.find(function (err, docs) {
+//                 res.header("Access-Control-Allow-Origin", "*");
+//                 res.header("Access-Control-Allow-Headers", "X-Requested-With");
+//                 console.log(docs);
+//             });
+//             res.end("posted");
+//     //     } else {
+//     //         console.log("JWT is invalid: " + err);
+//     //         res.send("403 : ACCESS FORBIDDEN");
+//     //     }
 
-    // });
-});
+//     // });
+// });
 
 
 //Add new copy API
 app.post('/addNewCopy', function (req, res) {
     console.log(req.headers.authorization);
-    // var jwtToken = req.headers.authorization.split(" ");
-    // aad.verify(jwtToken[1], null, function (err, result) {
-    //     if (result) {
+    var jwtToken = req.headers.authorization.split(" ");
+    aad.verify(jwtToken[1], null, function (err, result) {
+        if (result) {
             // db.booksDB.insert(JSON.parse(req.body.test));
             var isbn = req.body.isbn;
             var bookId = req.body.bookId;
@@ -955,12 +954,12 @@ app.post('/addNewCopy', function (req, res) {
                 console.log(docs);
             });
             res.end("posted");
-    //     } else {
-    //         console.log("JWT is invalid: " + err);
-    //         res.send("403 : ACCESS FORBIDDEN");
-    //     }
+        } else {
+            console.log("JWT is invalid: " + err);
+            res.send("403 : ACCESS FORBIDDEN");
+        }
 
-    // });
+    });
 });
 
 
@@ -973,39 +972,31 @@ app.post('/addNewCopy', function (req, res) {
 /**Web-api*** */
 app.get('/getAllBooks', function (req, res) {
     console.log(req.headers.authorization);
-    // var jwtToken = req.headers.authorization.split(" ");
-    // aad.verify(jwtToken[1], null, function (err, result) {
-    //     if (result) {
+    var jwtToken = req.headers.authorization.split(" ");
+    aad.verify(jwtToken[1], null, function (err, result) {
+        if (result) {
             db.booksDB.find(function (err, docs) {
                 //console.log(docs);
                 res.header("Access-Control-Allow-Origin", "*");
                 res.header("Access-Control-Allow-Headers", "X-Requested-With");
                 res.send(docs);
             });
-    //     }
-    //     else {
-    //         console.log("JWT is invalid: " + err);
-    //         res.send("403 : ACCESS FORBIDDEN");
-    //     }
+        }
+        else {
+            console.log("JWT is invalid: " + err);
+            res.send("403 : ACCESS FORBIDDEN");
+        }
 
-    // });
+    });
 });
-// app.get('/getAllBooks', function (req, res) {
-    
-//             db.booksDB.find(function (err, docs) {
-//                 //console.log(docs);
-//                 res.header("Access-Control-Allow-Origin", "*");
-//                 res.header("Access-Control-Allow-Headers", "X-Requested-With");
-//                 res.send(docs);
-//             });
-//         });
+
 
 app.get('/getMyFavGenre/:uId', function (req, res) {
     var mid = req.params.uId;
     console.log(req.headers.authorization);
-    // var jwtToken = req.headers.authorization.split(" ");
-    // aad.verify(jwtToken[1], null, function (err, result) {
-    //     if (result) {
+    var jwtToken = req.headers.authorization.split(" ");
+    aad.verify(jwtToken[1], null, function (err, result) {
+        if (result) {
             console.log("recom" + mid);
             var data = '{"mId":"' + mid + '"}';
             db.usersDB.find(JSON.parse(data), { 'interestedGenre': 1 }, function (err, docs) {
@@ -1017,13 +1008,13 @@ app.get('/getMyFavGenre/:uId', function (req, res) {
                 console.log("genre" + docs[0].interestedGenre);
                 res.send(docs[0].interestedGenre);
             });
-    //     }
-    //     else {
-    //         console.log("JWT is invalid: " + err);
-    //         res.send("403 : ACCESS FORBIDDEN");
-    //     }
+        }
+        else {
+            console.log("JWT is invalid: " + err);
+            res.send("403 : ACCESS FORBIDDEN");
+        }
 
-    // });
+    });
 });
 
 
@@ -1031,9 +1022,9 @@ app.get('/getMyFavGenre/:uId', function (req, res) {
 app.get('/getCategoryWiseBooks/:selectedCategory', function (req, res) {
     var category = req.params.selectedCategory;
     console.log(req.headers.authorization);
-    // var jwtToken = req.headers.authorization.split(" ");
-    // aad.verify(jwtToken[1], null, function (err, result) {
-    //     if (result) {
+    var jwtToken = req.headers.authorization.split(" ");
+    aad.verify(jwtToken[1], null, function (err, result) {
+        if (result) {
             console.log(category);
             var data = '{"genre":"' + category + '"}';
             db.booksDB.find(JSON.parse(data), {}, function (err, docs) {
@@ -1042,22 +1033,22 @@ app.get('/getCategoryWiseBooks/:selectedCategory', function (req, res) {
                 res.header("Access-Control-Allow-Headers", "X-Requested-With");
                 res.send(docs);
             });
-    //     }
-    //     else {
-    //         console.log("JWT is invalid: " + err);
-    //         res.send("403 : ACCESS FORBIDDEN");
-    //     }
+        }
+        else {
+            console.log("JWT is invalid: " + err);
+            res.send("403 : ACCESS FORBIDDEN");
+        }
 
-    // });
+    });
 });
 
 
 app.get('/getMyHistory/:mid', function (req, res) {
     var mid = req.params.mid;
     console.log(req.headers.authorization);
-    // var jwtToken = req.headers.authorization.split(" ");
-    // aad.verify(jwtToken[1], null, function (err, result) {
-    //     if (result) {
+    var jwtToken = req.headers.authorization.split(" ");
+    aad.verify(jwtToken[1], null, function (err, result) {
+        if (result) {
             var queryString2 = '{"mId":"' + mid + '"}';
             console.log(mid);
             console.log(queryString2);
@@ -1066,13 +1057,13 @@ app.get('/getMyHistory/:mid', function (req, res) {
                 res.header("Access-Control-Allow-Headers", "X-Requested-With");
                 res.send(docs);
             });
-    //     }
-    //     else {
-    //         console.log("JWT is invalid: " + err);
-    //         res.send("403 : ACCESS FORBIDDEN");
-    //     }
+        }
+        else {
+            console.log("JWT is invalid: " + err);
+            res.send("403 : ACCESS FORBIDDEN");
+        }
 
-    // });
+    });
 });
 
 
@@ -1085,9 +1076,9 @@ app.get('/rating/:mid/:isbn/:value', function (req, res) {
     var isbn = req.params.isbn;
     var value = req.params.value;
     console.log(req.headers.authorization);
-    // var jwtToken = req.headers.authorization.split(" ");
-    // aad.verify(jwtToken[1], null, function (err, result) {
-    //     if (result) {
+    var jwtToken = req.headers.authorization.split(" ");
+    aad.verify(jwtToken[1], null, function (err, result) {
+        if (result) {
             var queryString1 = '{"isbn":"' + isbn + '"}';
             var queryString3 = '{ "mId": "' + mid + '" }';
             var queryString4 = '{"$addToSet":{"reviews":{"mId":"' + mid + '","name":"' + name + '","rating":"' + value + '"}}}';
@@ -1133,32 +1124,32 @@ app.get('/rating/:mid/:isbn/:value', function (req, res) {
                 res.header("Access-Control-Allow-Headers", "X-Requested-With");
                 res.send(docs);
             });
-    //     }
-    //     else {
-    //         console.log("JWT is invalid: " + err);
-    //         res.send("403 : ACCESS FORBIDDEN");
-    //     }
+        }
+        else {
+            console.log("JWT is invalid: " + err);
+            res.send("403 : ACCESS FORBIDDEN");
+        }
 
-    // });
+    });
 });
 //return admin mids
 app.get('/getAdminId', function (req, res) {
     console.log("hieee");
     console.log(req.headers.authorization);
-    // var jwtToken = req.headers.authorization.split(" ");
-    // aad.verify(jwtToken[1], null, function (err, result) {
-        // if (result) {
+    var jwtToken = req.headers.authorization.split(" ");
+    aad.verify(jwtToken[1], null, function (err, result) {
+        if (result) {
             db.usersDB.find({ "role": "admin" }, { "mId": 1 }, function (err, docs) {
                 res.header("Access-Control-Allow-Origin", "*");
                 res.header("Access-Control-Allow-Headers", "X-Requested-With");
                 res.send(docs);
             });
-    //     } else {
-    //         console.log("JWT is invalid: " + err);
-    //         res.send("403 : ACCESS FORBIDDEN");
-    //     }
+        } else {
+            console.log("JWT is invalid: " + err);
+            res.send("403 : ACCESS FORBIDDEN");
+        }
 
-    // });
+    });
 });
 
 
@@ -1168,48 +1159,48 @@ app.get('/getBook/:type/:text', function (req, res) {
     var text = req.params.text;
     var type = req.params.type;
     console.log(req.headers.authorization);
-    // var jwtToken = req.headers.authorization.split(" ");
-    // aad.verify(jwtToken[1], null, function (err, result) {
-    //     if (result) {
+    var jwtToken = req.headers.authorization.split(" ");
+    aad.verify(jwtToken[1], null, function (err, result) {
+        if (result) {
             var queryString = '{"' + type + '":{"$regex":"' + text + '","$options":"i"}}';
             db.booksDB.find(JSON.parse(queryString), function (err, docs) {
                 res.header("Access-Control-Allow-Origin", "*");
                 res.header("Access-Control-Allow-Headers", "X-Requested-With");
                 res.send(docs);
             });
-    //     } else {
-    //         console.log("JWT is invalid: " + err);
-    //         res.send("403 : ACCESS FORBIDDEN");
-    //     }
+        } else {
+            console.log("JWT is invalid: " + err);
+            res.send("403 : ACCESS FORBIDDEN");
+        }
 
-    // });
+    });
 });
 //get all categories
 app.get('/getCategories', function (req, res) {
     console.log(req.headers.authorization);
-    // var jwtToken = req.headers.authorization.split(" ");
-    // aad.verify(jwtToken[1], null, function (err, result) {
-    //     if (result) {
+    var jwtToken = req.headers.authorization.split(" ");
+    aad.verify(jwtToken[1], null, function (err, result) {
+        if (result) {
             db.categoriesDB.find({}, function (err, docs) {
                 res.header("Access-Control-Allow-Origin", "*");
                 res.header("Access-Control-Allow-Headers", "X-Requested-With");
                 res.send(docs); //sending the response back to application
             });
-    //     }
-    //     else {
-    //         console.log("JWT is invalid: " + err);
-    //         res.send("403 : ACCESS FORBIDDEN");
-    //     }
-    // });
+        }
+        else {
+            console.log("JWT is invalid: " + err);
+            res.send("403 : ACCESS FORBIDDEN");
+        }
+    });
 });
 app.get('/getBookForDetailView/:isbn', function (req, res) {
     var isbn = req.params.isbn;
     console.log("ad");
     console.log(isbn);
     console.log(req.headers.authorization);
-    // var jwtToken = req.headers.authorization.split(" ");
-    // aad.verify(jwtToken[1], null, function (err, result) {
-    //     if (result) {
+    var jwtToken = req.headers.authorization.split(" ");
+    aad.verify(jwtToken[1], null, function (err, result) {
+        if (result) {
             var queryString = '{"isbn":"' + isbn + '"}';
             db.booksDB.find(JSON.parse(queryString), function (err, docs) {
                 console.log("Details" + docs[0].title);
@@ -1218,13 +1209,13 @@ app.get('/getBookForDetailView/:isbn', function (req, res) {
                 res.header("Access-Control-Allow-Headers", "X-Requested-With");
                 res.send(docs);
             });
-    //     }
-    //     else {
-    //         console.log("JWT is invalid: " + err);
-    //         res.send("403 : ACCESS FORBIDDEN");
-    //     }
+        }
+        else {
+            console.log("JWT is invalid: " + err);
+            res.send("403 : ACCESS FORBIDDEN");
+        }
 
-    // });
+    });
 });
 
 //like gets added to book and also who liked
@@ -1232,9 +1223,9 @@ app.get('/liked/:mid/:isbn', function (req, res) {
     var mid = req.params.mid;
     var isbn = req.params.isbn;
     console.log(req.headers.authorization);
-    // var jwtToken = req.headers.authorization.split(" ");
-    // aad.verify(jwtToken[1], null, function (err, result) {
-    //     if (result) {
+    var jwtToken = req.headers.authorization.split(" ");
+    aad.verify(jwtToken[1], null, function (err, result) {
+        if (result) {
             var queryString = '{"isbn" :"' + isbn + '"}';
             var queryString1 = '{"$set":{"likes":"' + likes + '"}}';
             var likes;
@@ -1246,13 +1237,13 @@ app.get('/liked/:mid/:isbn', function (req, res) {
             });
             likes += 1;
             res.send(likes);
-    //     }
-    //     else {
-    //         console.log("JWT is invalid: " + err);
-    //         res.send("403 : ACCESS FORBIDDEN");
-    //     }
+        }
+        else {
+            console.log("JWT is invalid: " + err);
+            res.send("403 : ACCESS FORBIDDEN");
+        }
 
-    // });
+    });
 });
 
 //>>>>>>>>>  NEW APIS LIMS 3.0 <<<<<<<<<<<<<
@@ -1264,6 +1255,8 @@ app.route('/getrecommendation').get(function (req, res, next) {
         });
 });
 
+
+//API for adding book to wishlist
 app.route('/addtowishlist/:mid/:isbn').get(function (req, res, next) {
 
     var isbn = req.params.isbn;
@@ -1293,6 +1286,7 @@ app.route('/addtowishlist/:mid/:isbn').get(function (req, res, next) {
         });
 });
 
+//API for getting details of book
 app.route('/getisbndetails/:isbn').get(function (req, res, next) {
     NewLimsModel.find({ isbn: { $eq: req.params.isbn } })
         .then(function (doc) {
@@ -1300,6 +1294,7 @@ app.route('/getisbndetails/:isbn').get(function (req, res, next) {
         });
 });
 
+//API for remove list
 app.route('/removewishlist/:mid/:isbn').get(function (req, res, next) {
 
     var isbn = req.params.isbn;
@@ -1312,6 +1307,7 @@ app.route('/removewishlist/:mid/:isbn').get(function (req, res, next) {
         });
 });
 
+//API for get wish list
 app.route('/getwishlist/:mid').get(function (req, res, next) {
     WishList.find({ mId: { $eq: req.params.mid } }, { wishList: 1 })
         .then(function (doc) {
@@ -1336,6 +1332,7 @@ app.route('/getwishlist/:mid').get(function (req, res, next) {
         });
 });
 
+//API for recommendations
 app.route('/recommend/:mId').get(function (req, res, next) {
     ReturnedBooks.find({ mId: { $eq: req.params.mId } })
         .then(function (doc) {
@@ -1350,6 +1347,7 @@ app.route('/recommend/:mId').get(function (req, res, next) {
         });
 });
 
+//API for notification
 app.route('/getNotifications/:mid').get(function(req, res, next) {
     IssuedBooks.find({ mId: { $eq: req.params.mid } })
         .then(function(doc) {
@@ -1357,12 +1355,16 @@ app.route('/getNotifications/:mid').get(function(req, res, next) {
         });
 }); 
 
+//Check for existing book
 app.route('/checkPresence/:isbn').get(function(req, res, next) {
     NewLimsModel.find({ isbn: { $eq: req.params.isbn } })
         .then(function(doc) {
             res.send(doc);
         });
 }); 
+
+//Add New Book to library
+
 module.exports = app;
 
 
